@@ -1,0 +1,12 @@
+name: MincraParty
+main: mincra.party.main.MincraParty
+version: 1.01
+website: http://mincra.ikaduchi.com/plugins/plugins.html
+author: [amutas]
+commands:
+     party:
+      description: This is a demo command.
+      usage: /<command> |create|invite|accept|deny|list|info|
+      aliases: pt
+      permission: mincra.party
+      permission-message: You don't have <permission>
