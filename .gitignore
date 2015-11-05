@@ -1,5 +1,6 @@
 /target/
+.project
 /.settings/
 .DS_Store
+.dropbox
 .classpath
-.project
