@@ -105,21 +105,20 @@ public class MincraCommands extends PlayerData implements CommandExecutor {
 			Util.debug(ChatColor.YELLOW+"メタデータを取得できません.");
 			return false;
 		}
-		boolean isLeader = player.getMetadata("partyleader").get(0).asBoolean();
 
-		String partyname = PlayerData.getPartyName(player);
+		String partyname = getPartyName(player);
 		if(partyname == null){
 			Util.debug(ChatColor.YELLOW+"パーティー名を取得できません.");
 			return false;
 		}
 
-		if(isLeader){
-			if(!PlayerData.partylist.containsKey(partyname)){
+		if(player.getMetadata("partyleader").get(0).asBoolean()){
+			if(!partylist.containsKey(partyname)){
 				Util.debug(ChatColor.YELLOW+"パーティリストにパーティーが存在しません.");
 				return false;
 			}
 			player.sendMessage(ChatColor.GRAY+"強制招集を行いました.");
-			for(final Player member:PlayerData.partylist.get(partyname)){
+			for(final Player member:partylist.get(partyname)){
 				if(!member.hasMetadata("partyleader")){
 					Util.debug(ChatColor.YELLOW+member.getName()+":パーティーリーダーのメタデータが存在しません.");
 					return false;
@@ -143,7 +142,7 @@ public class MincraCommands extends PlayerData implements CommandExecutor {
 			}
 		}else{
 			Player leader = null;
-			for(Player member:playerlist){
+			for(Player member:partylist.get(partyname)){
 				if(!member.hasMetadata("partyleader")){
 					Util.debug(ChatColor.YELLOW+member.getName()+":パーティーリーダーのメタデータが存在しません.");
 					return false;
@@ -234,7 +233,7 @@ public class MincraCommands extends PlayerData implements CommandExecutor {
 	    leaderlist.add(player);
 
 	    //プレイヤーにメタデータを設定
-	    PlayerData.addMetadata(player, args[1], true, (short) 1);
+	    addMetadata(player, args[1], true, (short) 1);
 
 	    scoreboardlist.put(args[1], new ScoreBord(args[1],partylist.get(args[1])));
 	    player.sendMessage(ChatColor.GRAY+args[1]+"パーティを作成しました。");
@@ -277,7 +276,7 @@ public class MincraCommands extends PlayerData implements CommandExecutor {
 		player.playSound(player.getLocation(), Sound.NOTE_PLING, 1, 1);
 
 		//プレイヤーにメタデータを設定
-	    PlayerData.addMetadata(player, partyname, false, (short) partylist.get(partyname).size());
+	    addMetadata(player, partyname, false, (short) partylist.get(partyname).size());
 		new BukkitRunnable(){
 			@Override
 			public void run() {
@@ -321,7 +320,7 @@ public class MincraCommands extends PlayerData implements CommandExecutor {
 		}
 
 		//プレイヤーにメタデータを設定
-	    PlayerData.addMetadata(player, partyname, false, (short) partylist.get(partyname).size());
+	    addMetadata(player, partyname, false, (short) partylist.get(partyname).size());
 
 		player.sendMessage(ChatColor.GOLD+partyname+"パーティに参加しました。");
 		invitelist.remove(player);
@@ -404,7 +403,7 @@ public class MincraCommands extends PlayerData implements CommandExecutor {
 					playerlist.remove(leaveplayer);
 
 					//プレイヤーのメタデータを削除
-				    PlayerData.removeMetadata(leaveplayer);
+				    removeMetadata(leaveplayer);
 
 					leaveplayer.sendMessage(ChatColor.GOLD+key+"パーティが解散されました。");
 				}
@@ -420,7 +419,7 @@ public class MincraCommands extends PlayerData implements CommandExecutor {
 				playerlist.remove(player);
 
 				//プレイヤーのメタデータを削除
-			    PlayerData.removeMetadata(player);
+			    removeMetadata(player);
 
 				player.sendMessage(ChatColor.GOLD+key+"パーティから脱退しました。");
 				int size = partylist.get(key).size();

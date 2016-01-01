@@ -55,6 +55,7 @@ public class PlayerData {
 		}
 		return null;
 	}
+	
 	public static void addMetadata(Player player,String partyName,boolean isLeader,short partySize){
 		player.setMetadata("partyname", new FixedMetadataValue(MincraParty.plugin, partyName));
 	    player.setMetadata("partyleader", new FixedMetadataValue(MincraParty.plugin, isLeader));
